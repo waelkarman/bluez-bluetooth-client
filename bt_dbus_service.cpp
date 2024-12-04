@@ -23,6 +23,51 @@ public:
         }
     }
 
+    /**
+     *  busctl introspect org.bluez /org/bluez/hci0
+     */
+    std::string introspect() {
+        GError *error = nullptr;
+
+        GVariant *result = g_dbus_connection_call_sync(
+            connection,
+            "org.bluez",
+            "/org/bluez/hci0",
+            "org.freedesktop.DBus.Introspectable",
+            "Introspect",
+            nullptr,
+            G_VARIANT_TYPE("(s)"),
+            G_DBUS_CALL_FLAGS_NONE,
+            -1,
+            nullptr,
+            &error
+        );
+
+        if (error != nullptr) {
+            std::cerr << "Failed to call method: " << error->message << std::endl;
+            g_error_free(error);
+            return "";
+        }
+
+        if (result == nullptr) {
+            std::cerr << "D-Bus call returned nullptr" << std::endl;
+            return "";
+        }
+
+        const gchar *introspect_data = nullptr;
+        g_variant_get(result, "(&s)", &introspect_data);
+
+        std::string introspection(introspect_data);
+        g_variant_unref(result);
+        std::cout << "Bluetooth introspection: " << introspection << std::endl;
+
+        return introspection;
+    }
+
+
+    /**
+     *  busctl call org.bluez /org/bluez/hci0 org.freedesktop.DBus.Properties Get ss org.bluez.Adapter1 Name
+     */
     std::string getName() {
         GError *error = nullptr;
         const gchar *interface_name = "org.bluez.Adapter1";
@@ -84,6 +129,7 @@ private:
 
 int main() {
     bt_service_dbus bt;
+    bt.introspect();
     bt.getName();
 
 
