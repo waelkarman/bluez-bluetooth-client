@@ -4,10 +4,6 @@
 
 using namespace std; 
 
-#include <gio/gio.h>
-#include <iostream>
-#include <string>
-
 class bt_service_dbus {
 
 public:
@@ -115,6 +111,55 @@ public:
         return adapter_name;
     }
 
+    /**
+     *  busctl call org.bluez /org/bluez/hci0 org.freedesktop.DBus.Properties Get ss org.bluez.Adapter1 Class
+     */
+    unsigned int getClass() {
+        GError *error = nullptr;
+        const gchar *interface_name = "org.bluez.Adapter1";
+        const gchar *property_name = "Class";
+
+        GVariant *result = g_dbus_connection_call_sync(
+            connection,
+            "org.bluez",
+            "/org/bluez/hci0",
+            "org.freedesktop.DBus.Properties",
+            "Get",
+            g_variant_new("(ss)", interface_name, property_name),
+            nullptr,
+            G_DBUS_CALL_FLAGS_NONE,
+            -1,
+            nullptr,
+            &error
+        );
+
+
+        if (error != nullptr) {
+            std::cerr << "Failed to call method: " << error->message << std::endl;
+            g_error_free(error);
+        }
+
+
+        if (result == nullptr) {
+            std::cerr << "D-Bus call returned nullptr" << std::endl;
+        }
+
+        GVariant *inner_variant = nullptr;
+        g_variant_get(result, "(v)", &inner_variant);
+
+        unsigned int name = 0;
+        g_variant_get(inner_variant, "u", &name);
+
+        unsigned int adapter_name(name);
+
+        g_variant_unref(inner_variant);
+        g_variant_unref(result);
+
+        std::cout << "Bluetooth adapter Class: " << adapter_name << std::endl;
+
+        return adapter_name;
+    }
+
     ~bt_service_dbus() {
         if (connection != nullptr) {
             g_object_unref(connection);
@@ -129,8 +174,9 @@ private:
 
 int main() {
     bt_service_dbus bt;
-    bt.introspect();
-    bt.getName();
+    // bt.introspect();
+    // bt.getName();
+    bt.getClass();
 
 
 
