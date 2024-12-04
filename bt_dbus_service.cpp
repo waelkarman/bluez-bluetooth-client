@@ -60,6 +60,38 @@ public:
         return introspection;
     }
 
+    void startDiscovery() {
+        GError *error = nullptr;
+
+
+        GVariant *result = g_dbus_connection_call_sync(
+            connection,
+            "org.bluez",
+            "/org/bluez/hci0",
+            "org.bluez.Adapter1",
+            "StartDiscovery",
+            nullptr,
+            nullptr,
+            G_DBUS_CALL_FLAGS_NONE,
+            -1,
+            nullptr,
+            &error
+        );
+
+        if (error != nullptr) {
+            std::cerr << "Failed to start discovery: " << error->message << std::endl;
+            g_error_free(error);
+        } else {
+            std::cout << "Discovery started successfully!" << std::endl;
+        }
+
+        if (result != nullptr) {
+            g_variant_unref(result);
+        }
+
+
+        while(true);
+    }
 
     /**
      *  busctl call org.bluez /org/bluez/hci0 org.freedesktop.DBus.Properties Get ss org.bluez.Adapter1 Name
@@ -174,10 +206,10 @@ private:
 
 int main() {
     bt_service_dbus bt;
-    // bt.introspect();
-    // bt.getName();
-    bt.getClass();
 
+    bt.getName();
+    bt.getClass();
+    bt.startDiscovery();
 
 
     return 0;
