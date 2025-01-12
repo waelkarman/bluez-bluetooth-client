@@ -15,7 +15,7 @@ org.bluez.Adapter1                  interface -         -                       
 .SetDiscoveryFilter                 method    a{sv}     -                                        -
 .StartDiscovery                     method    -         -                                        -
 .StopDiscovery                      method    -         -                                        -
-.Address                            property  s         "4C:49:6C:4E:A3:DA"                      emits-change
+.Address                            property  s         "RC:49:6D:5E:23:FA"                      emits-change
 .AddressType                        property  s         "public"                                 emits-change
 .Alias                              property  s         "ar-lx0275"                              emits-change writable
 .Class                              property  u         8126732                                  emits-change
@@ -23,13 +23,13 @@ org.bluez.Adapter1                  interface -         -                       
 .DiscoverableTimeout                property  u         180                                      emits-change writable
 .Discovering                        property  b         false                                    emits-change
 .ExperimentalFeatures               property  as        -                                        emits-change
-.Modalias                           property  s         "usb:v1D6Bp0246d0540"                    emits-change
-.Name                               property  s         "ar-lx0275"                              emits-change
+.Modalias                           property  s         "usb:v1D6Bp0246d00"                    emits-change
+.Name                               property  s         "waelkarman"                             emits-change
 .Pairable                           property  b         false                                    emits-change writable
 .PairableTimeout                    property  u         0                                        emits-change writable
 .Powered                            property  b         true                                     emits-change writable
 .Roles                              property  as        2 "central" "peripheral"                 emits-change
-.UUIDs                              property  as        17 "00001133-0000-1000-8000-00805f9b34f… emits-change
+.UUIDs                              property  as        17 "00004323-0000-1000-8800-00654f9b34f… emits-change
 org.bluez.GattManager1              interface -         -                                        -
 .RegisterApplication                method    oa{sv}    -                                        -
 .UnregisterApplication              method    o         -                                        -
