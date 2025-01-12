@@ -1,4 +1,4 @@
-# bluetooth-service
+# bluetooth-service [ DRAFT - in development]
 interact with the Bluetooth devices through the D-Bus interface
 
 ```
